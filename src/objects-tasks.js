@@ -202,7 +202,6 @@ function sellTickets(/* queue */) {
 function Rectangle(width, height) {
   this.width = width;
   this.height = height;
-
   this.getArea = () => {
     return this.height * this.width;
   };
@@ -218,8 +217,8 @@ function Rectangle(width, height) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
