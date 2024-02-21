@@ -182,8 +182,30 @@ function makeWord(lettersObject) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const ticketPrice = 25;
+  let selledTickets = 0;
+  let canSell = false;
+
+  if (!queue.length) {
+    canSell = true;
+  }
+
+  queue.forEach((item) => {
+    if (item === ticketPrice) {
+      selledTickets += item;
+      canSell = true;
+    }
+
+    if (item > ticketPrice && item - selledTickets === 0) {
+      selledTickets += item;
+      canSell = true;
+    } else {
+      canSell = false;
+    }
+  });
+
+  return canSell;
 }
 
 /**
@@ -390,7 +412,7 @@ const cssSelectorBuilder = {
     throw new Error('Not implemented');
   },
 
-  id(/* value */) {
+  id(/* svalue */) {
     throw new Error('Not implemented');
   },
 
