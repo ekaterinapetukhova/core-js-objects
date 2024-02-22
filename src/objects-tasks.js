@@ -408,32 +408,61 @@ function group(array, keySelector, valueSelector) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  selectors: '',
+  unique: [1, 2, 6],
+  current: 0,
+
+  createSelector(value, step) {
+    if (this.current === step && this.unique.includes(this.current)) {
+      throw new Error(
+        'Element, id and pseudo-element should not occur more then one time inside the selector'
+      );
+    }
+
+    if (this.current > step) {
+      throw new Error(
+        'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+      );
+    }
+
+    const obj = Object.create(this);
+    obj.selectors += value;
+    obj.current = step;
+    return obj;
   },
 
-  id(/* svalue */) {
-    throw new Error('Not implemented');
+  element(value) {
+    return this.createSelector(value, 1);
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    return this.createSelector(`#${value}`, 2);
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    return this.createSelector(`.${value}`, 3);
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    return this.createSelector(`[${value}]`, 4);
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    return this.createSelector(`:${value}`, 5);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    return this.createSelector(`::${value}`, 6);
+  },
+
+  combine(selector1, combinator, selector2) {
+    return this.createSelector(
+      `${selector1.selectors} ${combinator} ${selector2.selectors}`
+    );
+  },
+
+  stringify() {
+    return this.selectors;
   },
 };
 
